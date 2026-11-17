@@ -6,30 +6,90 @@ vector: *which of these options?*, *yes or no?*, *what number?*
 
 It is a minimal, from-scratch take on the idea behind
 [venn-vdm](https://github.com/markrussinovich/venn-vdm). It shares no code with
-that project and is far smaller: about 500 lines of Python on numpy.
+that project and is far smaller: about 1,200 lines of Python on numpy.
 
-## Install and try
+## Install
 
 ```
-python -m venv .venv && source .venv/bin/activate
+python3 -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev]"
-vecdecide quickstart            # or: python -m vecdecide quickstart
-vecdecide route "I can't reset my password"
-pytest
+vecdecide quickstart        # demo on built-in tickets, no files needed
+python -m pytest
 ```
 
-The quickstart needs no model download. It uses a hashing embedder that only
-sees word overlap. For real use, swap in a semantic model:
+## Use it on your own data
+
+Put your examples in a CSV file with a column of text and a column of labels
+(the team, category, tag, whatever you want it to choose). An `outcome` column
+is optional: a number where higher is better, such as 1 for "this choice
+worked" and 0 for "it had to be redone". Without it, every row counts as good.
+Any other columns are kept and shown alongside.
+
+```csv
+text,label,outcome
+I was charged twice this month,billing,1
+The app crashes on launch,technical,1
+I cannot log in to see my invoice,billing,0
+```
+
+`examples/tickets.csv` is a ready-made file to try the commands on.
 
 ```
-pip install -e ".[embedding]"
-```
-```python
-from vecdecide import Decider, SentenceTransformerEmbedder
-d = Decider(SentenceTransformerEmbedder())   # downloads a ~90 MB model once
+# 1. How well would it work? Cross-validates on your file; nothing is saved.
+vecdecide evaluate examples/tickets.csv
+
+# 2. Build a model folder from the file.
+vecdecide build examples/tickets.csv -o my-model
+
+# 3. Ask it things.
+vecdecide decide my-model "My card was charged two times"
+vecdecide decide my-model --method head "Where is my parcel"
+vecdecide decide my-model --json "Where is my parcel"      # for other programs
+
+# 4. Run a whole CSV; adds decision and confidence columns.
+vecdecide batch my-model new_tickets.csv -o decided.csv
+
+# 5. Teach it: record what actually happened. The next answer uses it.
+vecdecide record my-model "The courier lost my box" shipping --outcome 1
+
+vecdecide info my-model            # what is inside
+vecdecide <command> --help         # every option
 ```
 
-## Three ways to decide
+Different column names? Add `--text-col message --label-col category`
+(and `--outcome-col` if you have one).
+
+### Two methods
+
+- **store** (default): finds the most similar past cases and picks the label
+  that worked best for them. It shows those cases as evidence, it learns
+  instantly from `record`, and it uses bad outcomes to steer away from
+  choices that failed. It answers `(none of these)` when nothing in the history
+  is similar enough (`--min-similarity` sets the bar).
+- **head**: a small classifier trained on the good outcomes. Often a bit more
+  accurate, gives no evidence, and is refitted after each `record`.
+
+Run `evaluate` to see which works better on your data, and compare both
+against the baseline it prints: always guessing the most common label.
+
+### Getting better accuracy
+
+The default embedder matches words, not meaning: "billed" and "charged" look
+unrelated to it. On the sample file it gets about 71% (store) and 77% (head)
+against a 25% baseline. A semantic model usually does much better:
+
+```
+pip install -e ".[embedding]"                              # one-off, large download
+vecdecide evaluate examples/tickets.csv --embedder st      # compare first
+vecdecide build examples/tickets.csv -o my-model --embedder st
+```
+
+`--embedder st:<model name>` picks any
+[sentence-transformers](https://www.sbert.net) model. The model folder
+remembers which embedder it was built with. More examples per label helps
+too: aim for at least 20.
+
+## Python API
 
 ```python
 from vecdecide import Decider, OutcomeStore
@@ -79,7 +139,9 @@ in place of text, so vectors you already have can be reused for new questions.
 | `vecdecide/store.py` | `OutcomeStore`: add, nearest, save, load |
 | `vecdecide/heads.py` | `ChoiceHead` (softmax regression), `ScoreHead` (ridge + conformal interval) |
 | `vecdecide/decider.py` | `Decider`: the question API |
+| `vecdecide/project.py` | `Model` folders, CSV reading, cross-validation |
 | `vecdecide/__main__.py` | CLI |
+| `examples/tickets.csv` | 84 sample tickets to try the commands on |
 | `examples/route_ticket.py` | The three methods side by side |
 
 ## Limits
@@ -92,13 +154,14 @@ in place of text, so vectors you already have can be reused for new questions.
   guarantee.
 - Nearest-neighbour search is brute force. Fine to roughly 100k records;
   beyond that, put an index such as FAISS behind `OutcomeStore.nearest`.
-- The sample ticket data is invented and tiny. It demonstrates the mechanics,
-  not accuracy.
+- The sample ticket data is invented. Accuracy on it says little about
+  accuracy on yours; run `evaluate` on your own file.
+- Model folders are rewritten in full on every `record`. Fine for thousands of
+  cases, slow for millions.
 
 ## Ideas for next steps
 
-An HTTP endpoint, an approximate-nearest-neighbour index, a head that outputs
-an explicit "none" class, drift detection between two sets of vectors, and
-running one question over every row of a stored collection.
+An HTTP endpoint, an approximate-nearest-neighbour index, score questions from
+CSV, and drift detection between two sets of vectors.
 
 MIT licensed.

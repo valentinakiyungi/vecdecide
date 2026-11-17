@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "vecdecide"
-version = "0.1.0"
+version = "0.2.0"
 description = "Small, fast decisions over embeddings: choice, yes/no and score questions from heads and outcome stores."
 readme = "README.md"
 requires-python = ">=3.10"

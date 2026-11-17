@@ -19,6 +19,17 @@ import numpy as np
 
 _WORD = re.compile(r"[a-z0-9]+")
 
+# Very common English words carry little signal and make unrelated texts look
+# alike, so the hashing embedder skips them.
+STOPWORDS = frozenset("""
+a an the and or but if so of to in on at by for from with about into over after before
+than then as is are was were be been being am do does did done have has had having
+i me my mine we us our you your he him his she her it its they them their this that these
+those there here what which who whom whose when where why how all any both each few more
+most other some such no nor not only own same too very can will just should would could
+may might must shall please also get got still since yet up out off again once
+""".split())
+
 
 class Embedder(Protocol):
     dim: int
@@ -38,12 +49,14 @@ def normalize(x: np.ndarray) -> np.ndarray:
 class HashingEmbedder:
     """Signed feature hashing over words, word bigrams and character n-grams."""
 
-    def __init__(self, dim: int = 1024, char_ngrams: tuple[int, ...] = (3, 4)):
+    def __init__(self, dim: int = 1024, char_ngrams: tuple[int, ...] = (3, 4),
+                 stopwords: frozenset[str] = STOPWORDS):
         self.dim = dim
         self.char_ngrams = char_ngrams
+        self.stopwords = stopwords
 
     def _features(self, text: str):
-        words = _WORD.findall(text.lower())
+        words = [w for w in _WORD.findall(text.lower()) if w not in self.stopwords]
         for w in words:
             yield "w:" + w, 1.0
             for n in self.char_ngrams:

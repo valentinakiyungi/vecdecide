@@ -1,0 +1,85 @@
+text,label,outcome,channel
+I was charged twice for my subscription this month,billing,1,email
+Please refund the duplicate charge on my credit card,billing,1,chat
+My invoice shows the wrong amount and tax,billing,1,email
+How do I update the credit card used for payment,billing,1,chat
+I need a receipt for my last payment,billing,1,email
+Cancel my subscription and refund the annual plan,billing,1,email
+Why did my monthly price go up,billing,1,chat
+The payment was declined but my card works everywhere else,billing,1,chat
+Can I switch from monthly to annual billing,billing,1,email
+I was billed after I cancelled my plan,billing,1,email
+Please send the invoice to my accounting department,billing,1,email
+Do you offer a discount for nonprofits,billing,1,email
+My bank shows a pending charge I do not recognise,billing,1,chat
+How do I get a refund for an unused month,billing,1,chat
+Add our VAT number to the invoices,billing,1,email
+The charge on my statement is in the wrong currency,billing,1,email
+Can I pay by bank transfer instead of card,billing,1,email
+The trial ended and I was charged without warning,billing,1,chat
+Where can I download all my past invoices,billing,1,chat
+Please change the billing address on my invoice,billing,1,email
+The app crashes when I open the settings page,technical,1,chat
+Getting error 500 when uploading a file,technical,1,email
+The export button does nothing after the latest update,technical,1,chat
+Sync is stuck and my files are not uploading,technical,1,chat
+The mobile app freezes on the loading screen,technical,1,chat
+API requests return a timeout error since yesterday,technical,1,email
+Notifications stopped arriving on my phone,technical,1,chat
+The dashboard is blank in Safari but works in Chrome,technical,1,email
+Search returns no results even for files I can see,technical,1,chat
+The page keeps reloading and I lose my work,technical,1,chat
+Images are not loading in the shared folder,technical,1,email
+The desktop app uses all my CPU and the fan is loud,technical,1,email
+Webhook calls to our server are failing with error 401,technical,1,email
+The calendar integration duplicates every event,technical,1,chat
+The app crashes on startup after updating to the new version,technical,1,chat
+Exported CSV files are missing the last column,technical,1,email
+Dark mode makes the text invisible in the editor,technical,1,chat
+The upload progress bar gets stuck at ninety nine percent,technical,1,chat
+The browser extension shows an error and will not connect,technical,1,email
+Uploads are very slow since this morning,technical,1,chat
+I forgot my password and the reset email never arrives,account,1,email
+I cannot log in it says my account is locked,account,1,chat
+How do I change the email address on my account,account,1,email
+Please delete my account and all my data,account,1,email
+Two factor authentication code is not accepted at login,account,1,chat
+I want to add a team member to my account,account,1,chat
+How do I remove a user who left the company,account,1,email
+I lost my phone and cannot get my two factor code,account,1,chat
+Can I transfer ownership of the workspace to a colleague,account,1,email
+My username is wrong please change it,account,1,chat
+I keep getting logged out every few minutes,account,1,chat
+How do I set up single sign on for my team,account,1,email
+I signed up with the wrong email address,account,1,chat
+Please merge my two accounts into one,account,1,email
+Someone else logged into my account I think it was hacked,account,1,chat
+How do I give a colleague admin rights,account,1,email
+The password reset link says it has expired,account,1,chat
+I want to download a copy of all my personal data,account,1,email
+Can I change the name of my workspace,account,1,chat
+Login with Google does not work anymore,account,1,chat
+My order has not arrived after two weeks,shipping,1,email
+The tracking number does not work on the courier site,shipping,1,chat
+The package arrived damaged,shipping,1,email
+Can I change the delivery address for my order,shipping,1,chat
+I received the wrong item in my parcel,shipping,1,email
+Do you ship to Canada,shipping,1,chat
+How long does express delivery take,shipping,1,chat
+The courier left my package at the wrong house,shipping,1,email
+I want to return the device I received,shipping,1,email
+My order shows delivered but nothing came,shipping,1,chat
+Part of my order is missing from the box,shipping,1,email
+Can I pick up my order instead of delivery,shipping,1,chat
+The delivery date keeps getting pushed back,shipping,1,chat
+How do I print a return label,shipping,1,email
+Customs is asking me to pay a fee for my parcel,shipping,1,email
+I cannot log in to see my invoice,billing,0,chat
+I cannot log in to download my receipt,billing,0,chat
+Payment page shows an error 500 when I submit my card,billing,0,email
+Payment page crashes when I submit my credit card,technical,1,email
+Locked out of my account so I cannot see my invoice,account,1,chat
+The app crashes when I try to track my order,shipping,0,chat
+The app crashes when I open the order tracking page,technical,1,chat
+I was charged for shipping on a free delivery order,shipping,0,email
+I was charged a delivery fee on a free shipping order,billing,1,email
