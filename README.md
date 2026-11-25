@@ -6,7 +6,7 @@ vector: *which of these options?*, *yes or no?*, *what number?*
 
 It is a minimal, from-scratch take on the idea behind
 [venn-vdm](https://github.com/markrussinovich/venn-vdm). It shares no code with
-that project and is far smaller: about 1,200 lines of Python on numpy.
+that project and is far smaller: about 1,200 lines of Python on NumPy.
 
 ## Install
 
@@ -26,13 +26,13 @@ worked" and 0 for "it had to be redone". Without it, every row counts as good.
 Any other columns are kept and shown alongside.
 
 ```csv
-text,label,outcome
-I was charged twice this month,billing,1
-The app crashes on launch,technical,1
-I cannot log in to see my invoice,billing,0
+text, label, outcome
+I was charged twice this month, billing,1
+The app crashes on launch, technical,1
+I cannot log in to see my invoice, billing,0
 ```
 
-`examples/tickets.csv` is a ready-made file to try the commands on.
+`examples/tickets.csv` is a ready-made file to test the commands.
 
 ```
 # 1. How well would it work? Cross-validates on your file; nothing is saved.
@@ -75,7 +75,7 @@ against the baseline it prints: always guessing the most common label.
 ### Getting better accuracy
 
 The default embedder matches words, not meaning: "billed" and "charged" look
-unrelated to it. On the sample file it gets about 71% (store) and 77% (head)
+unrelated to it. On the sample file, it gets about 71% (store) and 77% (head)
 against a 25% baseline. A semantic model usually does much better:
 
 ```
@@ -112,7 +112,7 @@ store = OutcomeStore(d.embedder.dim)
 d.remember(store, "charged twice this month", "billing", outcome=1.0)
 d.remember(store, "can't log in to see invoice", "billing", outcome=0.0)  # bounced
 decision = d.decide_from_outcomes("double charge on my card", store)
-decision.answer, decision.confidence, decision.evidence
+decision. answer, decision confidence, decision. evidence
 ```
 
 **3. Trained heads.** A few thousand parameters on top of the frozen embedder.
@@ -153,7 +153,7 @@ in place of text, so vectors you already have can be reused for new questions.
 - `None` ("none of these") is a hint that the case looks unfamiliar, not a
   guarantee.
 - Nearest-neighbour search is brute force. Fine to roughly 100k records;
-  beyond that, put an index such as FAISS behind `OutcomeStore.nearest`.
+  Beyond that, add an index like FAISS behind `OutcomeStore.nearest`.
 - The sample ticket data is invented. Accuracy on it says little about
   accuracy on yours; run `evaluate` on your own file.
 - Model folders are rewritten in full on every `record`. Fine for thousands of
